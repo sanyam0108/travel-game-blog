@@ -1,15 +1,12 @@
 import os
-
-from flask import Flask, send_file
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return send_file('src/index.html')
-
-def main():
-    app.run(port=int(os.environ.get('PORT', 80)))
+    # This tells Flask to look for a file called index.html in a 'templates' folder
+    return render_template('index.html')
 
 if __name__ == "__main__":
-    main()
+    app.run(port=int(os.environ.get('PORT', 8080)))
