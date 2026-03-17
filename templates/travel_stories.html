@@ -1,0 +1,26 @@
+<div class="container" style="text-align: center; padding: 50px; background: #0f172a; color: white; font-family: 'Outfit';">
+    <h1>Global Travel Stories</h1>
+    <p style="color: #94a3b8;">Click a continent to see my stories.</p>
+
+    <div style="max-width: 900px; margin: 40px auto; background: #1e293b; padding: 30px; border-radius: 30px;">
+        <svg viewBox="0 0 1000 500" style="fill: #475569;">
+            <a href="/travels/europe" style="cursor: pointer;">
+                <path d="M480,100 L520,100 L540,150 L500,180 L470,150 Z" fill="#3b82f6" class="land" />
+                <text x="475" y="140" fill="white" font-size="14" font-weight="bold">UK / EUROPE</text>
+            </a>
+
+            <a href="/travels/asia">
+                <path d="M550,110 L800,150 L850,300 L600,350 L540,200 Z" class="land" />
+                <text x="650" y="220" fill="white" font-size="14">ASIA (RUPEE)</text>
+            </a>
+
+            <path d="M100,100 L300,120 L250,450 L120,280 Z" opacity="0.3" /> 
+            <path d="M480,210 L580,250 L550,400 L450,380 Z" opacity="0.3" />
+        </svg>
+    </div>
+</div>
+
+<style>
+    .land { transition: 0.3s; cursor: pointer; }
+    .land:hover { fill: #60a5fa; filter: drop-shadow(0 0 8px #60a5fa); }
+</style>

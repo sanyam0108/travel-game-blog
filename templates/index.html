@@ -1,17 +1,170 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Sanyam's Blog</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanyam’s Gaming & Global Travels</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
-        body { font-family: sans-serif; text-align: center; background-color: #f0f4f8; padding: 50px; }
-        h1 { color: #2c3e50; }
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; }
+        :root { --primary: #1d4ed8; --bg: #ffffff; }
+        body { margin: 0; font-family: 'Outfit', sans-serif; background: var(--bg); color: #0f172a; scroll-behavior: smooth; }
+        
+        .munro-badge {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            z-index: 2000;
+            text-align: center;
+        }
+        .badge-count { font-size: 1.4rem; font-weight: 800; color: var(--primary); display: block; line-height: 1.2; }
+        .badge-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; font-weight: 700; }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Pointing to your LOCAL uploaded file */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4)), 
+                        url('/static/images/hero.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+        }
+
+        .hero h1 { font-size: 3.5rem; text-shadow: 0 4px 15px rgba(0,0,0,0.5); margin: 0; padding: 0 20px; }
+
+        .section { padding: 60px 20px; max-width: 1100px; margin: 0 auto; }
+        
+        #map { height: 600px; width: 100%; border-radius: 20px; border: 1px solid #e2e8f0; z-index: 1; }
+
+        .map-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        
+        .legend { font-size: 0.85rem; background: #f8fafc; padding: 8px 16px; border-radius: 8px; border: 1px solid #e2e8f0; font-weight: 600; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <h1>Sanyam’s Gaming & Global Travels</h1>
-        <p>Welcome to my world. Adventure and high scores await!</p>
+
+    <div class="munro-badge">
+        <span class="badge-count">52 / 282</span>
+        <span class="badge-label">Munros Bagged</span>
     </div>
+
+    <section class="hero">
+        <h1>Sanyam’s Gaming & Global Travels</h1>
+    </section>
+
+    <section class="section">
+        <div class="map-header">
+            <h2 style="margin:0;">Scotland Tracker</h2>
+            <div class="legend">
+                <span style="color: #ef4444">●</span> Munros | <span style="color: #3b82f6">●</span> Cities
+            </div>
+        </div>
+        <div id="map"></div>
+    </section>
+
+    <section class="section" style="text-align: center; padding-top: 0;">
+        <div style="display: flex; gap: 20px; justify-content: center;">
+            <a href="/munros" style="text-decoration: none; background: var(--primary); color: white; padding: 15px 30px; border-radius: 50px; font-weight: bold; box-shadow: 0 4px 15px rgba(29, 78, 216, 0.3);">
+                Expand Munro Map →
+            </a>
+            
+            <a href="/travels" style="text-decoration: none; background: #0f172a; color: white; padding: 15px 30px; border-radius: 50px; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                Explore Travel Stories →
+            </a>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. Initialize Map
+            var map = L.map('map').setView([56.81, -4.18], 7); 
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+            // 2. Marker Function
+            function addMunro(lat, lon, name, id, date) {
+                L.circleMarker([lat, lon], {
+                    radius: 8, 
+                    fillColor: "#ef4444", 
+                    color: "#fff", 
+                    weight: 2, 
+                    fillOpacity: 0.9
+                }).addTo(map).bindPopup(`
+                    <div style="text-align:center; font-family: 'Outfit'; min-width:150px;">
+                        <b style="font-size:1.1rem; display:block; margin-bottom:5px;">${name}</b>
+                        <span style="color:#64748b; font-size:0.9rem;">Bagged: ${date}</span><br><br>
+                        <a href="/munro/${id}" style="background:#1d4ed8; color:white; padding:8px 12px; border-radius:5px; text-decoration:none; display:inline-block; font-weight:bold;">View Story</a>
+                    </div>
+                `);
+            }
+
+            // 3. The 52 Pins
+            addMunro(56.1903, -4.6333, "Ben Lomond", "ben-lomond", "15 Apr 2023");
+            addMunro(56.2739, -4.7550, "Ben Vorlich (Arrochar)", "ben-vorlich-arrochar", "22 Apr 2023");
+            addMunro(56.2497, -4.7816, "Ben Vane", "ben-vane", "9 Sep 2023");
+            addMunro(56.2368, -4.8171, "Ben Ime", "ben-ime", "16 Sep 2023");
+            addMunro(56.2209, -4.7890, "Ben Narnain", "ben-narnain", "16 Sep 2023");
+            addMunro(56.5447, -4.2124, "Ben Ghlas", "ben-ghlas", "23 Sep 2023");
+            addMunro(56.5442, -4.2217, "Ben Lawers", "ben-lawers", "23 Sep 2023");
+            addMunro(56.3413, -4.2215, "Ben Vorlich (Loch Earn)", "ben-vorlich-earn", "24 Sep 2023");
+            addMunro(56.3868, -4.5422, "Ben More", "ben-more", "7 Oct 2023");
+            addMunro(56.3533, -4.5908, "An Caisteal", "an-caisteal", "5 May 2024");
+            addMunro(56.3421, -4.5765, "Ben a’ Chroin", "ben-a-chroin", "5 May 2024");
+            addMunro(56.3217, -4.6334, "Ben Chabhair", "ben-chabhair", "1 June 2024");
+            addMunro(56.5262, -4.4172, "Meall Ghaordaidh", "meall-ghaordaidh", "4 Oct 2024");
+            addMunro(56.7490, -5.0450, "Mullach nan Coirean", "mullach-nan-coirean", "10 Apr 2025");
+            addMunro(56.7436, -4.9691, "Stob Bàn", "stob-ban", "12 Apr 2025");
+            addMunro(56.6341, -4.9123, "Stob Dubh", "stob-dubh", "19 Apr 2025");
+            addMunro(56.6433, -4.9122, "Stob Coire Raineach", "stob-coire-raineach", "19 Apr 2025");
+            addMunro(56.5932, -4.3821, "Meall Buidhe", "meall-buidhe", "25 Apr 2025");
+            addMunro(56.6212, -4.2341, "Carn Gorm", "carn-gorm", "26 Apr 2025");
+            addMunro(56.6234, -4.1982, "Meall Garbh (Lyon)", "meall-garbh-lyon", "26 Apr 2025");
+            addMunro(56.6342, -4.1723, "Carn Mairg", "carn-mairg", "26 Apr 2025");
+            addMunro(56.4912, -4.5621, "Creag Mhòr", "creag-mhor", "26 Apr 2025");
+            addMunro(56.7969, -5.0036, "Ben Nevis", "ben-nevis", "4 May 2025");
+            addMunro(56.3872, -3.9512, "Ben Chonzie", "ben-chonzie", "10 May 2025");
+            addMunro(56.8432, -4.3121, "Beinn Udlamain", "beinn-udlamain", "30 May 2025");
+            addMunro(56.8122, -4.3123, "Sgàirneach Mhòr", "sgairneach-mhor", "30 May 2025");
+            addMunro(56.8621, -4.2412, "Carn Asada", "carn-asada", "31 May 2025");
+            addMunro(56.8421, -4.2812, "A’ Mharconaich", "a-mharconaich", "6 June 2025");
+            addMunro(56.8521, -4.3412, "Geal Chàrn (Drum)", "geal-charn-drum", "6 June 2025");
+            addMunro(56.8723, -3.4212, "Carn an Tuirc", "carn-an-tuirc", "7 June 2025");
+            addMunro(56.8712, -3.4512, "Cairn of Claise", "cairn-of-claise", "7 June 2025");
+            addMunro(56.8722, -3.3712, "Glas Maol", "glas-maol", "7 June 2025");
+            addMunro(56.8521, -3.3612, "Creag Leacach", "creag-leacach", "7 June 2025");
+            addMunro(56.5421, -4.2912, "Meall nan Tarmachan", "meall-nan-tarmachan", "28 June 2025");
+            addMunro(56.5712, -4.2412, "Meall Corranaich", "meall-corranaich", "29 June 2025");
+            addMunro(56.5821, -4.2512, "Meall a’ Choire Lèith", "meall-a-choire-leith", "29 June 2025");
+            addMunro(56.5612, -4.1812, "Meall Greigh", "meall-greigh", "30 June 2025");
+            addMunro(56.5721, -4.2012, "Meall Garbh (Lawers)", "meall-garbh-lawers", "30 June 2025");
+            addMunro(56.5732, -4.2212, "An Stùc", "an-stuc", "30 June 2025");
+            addMunro(57.1421, -4.0123, "Càrn Dearg", "carn-dearg-monadh", "11 July 2025");
+            addMunro(57.1521, -4.0223, "Càrn Sgulain", "carn-sgulain", "11 July 2025");
+            addMunro(57.1212, -4.0512, "A’ Chailleach", "a-chailleach", "11 July 2025");
+            addMunro(56.9121, -4.4512, "Geal Chàrn (Monadh)", "geal-charn-monadh", "13 July 2025");
+            addMunro(56.6669, -4.0044, "Schiehallion", "schiehallion", "19 July 2025");
+            addMunro(56.8612, -4.1812, "A’ Bhuidheanach Bheag", "a-bhuidheanach-bheag", "20 Aug 2025");
+            addMunro(56.9121, -4.1712, "Càrn na Caim", "carn-na-caim", "20 Aug 2025");
+            addMunro(57.1321, -5.0212, "Càrn Ghluasaid", "carn-ghluasaid", "18 Oct 2025");
+            addMunro(57.1342, -5.0512, "Sgùrr nan Conbhairean", "sgurr-nan-conbhairean", "18 Oct 2025");
+            addMunro(57.1512, -5.0612, "Sàil Chaorainn", "sail-chaorainn", "18 Oct 2025");
+            addMunro(56.5021, -4.6812, "Beinn Mhanach", "ben-mhanach", "1 Feb 2026");
+            addMunro(56.9812, -4.9812, "Sròn a' Choire Ghaibh", "sron-a-choire-ghaibh", "7 Mar 2026");
+            addMunro(56.9712, -4.9512, "Meall na Teanga", "meall-na-teanga", "7 Mar 2026");
+        });
+    </script>
 </body>
 </html>
