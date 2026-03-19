@@ -1,7 +1,7 @@
 {
-    "ben-lomond": { "name": "Ben Lomond","date": "15 Apr 2023", "area": "Loch Lomond", "hero": "1.jpg","number": 1,"hazards": "Busy tourist path, snow on summit","kit": "Standard hiking gear + layers for snow","is_first": true },
-    "ben-vorlich-arrochar": { "name": "Ben Vorlich (Arrochar)", "date": "22 Apr 2023", "area": "Arrochar Alps", "hero": "1.jpg", "number": 2 },
-    "ben-vane": { "name": "Ben Vane", "date": "9 Sep 2023", "area": "Arrochar Alps", "hero": "1.jpg", "number": 3, "repeats": "5 Sep 2024, 15 Mar 2025" },
+    "ben-lomond": {"name": "Ben Lomond","date": "15 Apr 2023","area": "Loch Lomond","hero": "1.jpg","number": 1,"is_first": true,"distance": "12km / 7.5 miles","time": "4.5 - 5.5 hours","ascent": "990m","grid_ref": "NS359986","bog_factor": "3/5","extra_details": {"Hazards": "Busy tourist path, snow on summit","Kit": "Standard hiking gear + layers for snow","Starting Point": "Rowardennan"}},
+    "ben-vorlich-arrochar": {"name": "Ben Vorlich (Arrochar)","date": "22 Apr 2023","area": "Arrochar Alps","hero": "15.jpg","number": 2,"distance": "13.5km / 8.5 miles","time": "5 - 6.5 hours","ascent": "945m","grid_ref": "NN322098","bog_factor": "2/5","extra_details": {"Starting Point": "Inveruglas","Group": "The Core Walking Group"}},
+    "ben-vane": {"name": "Ben Vane","date": "05 Sep 2023","area": "Arrochar Alps","hero": "35.jpg","number": 3,"distance": "11km / 6.75 miles","time": "4.5 - 6.5 hours","ascent": "930m","grid_ref": "NN322098","bog_factor": "3/5","extra_details": {"Repeat Climbs": "5 Sep 2024, 15 Mar 2025","Languages Spoken": "Spanish & Hindi practice","Character": "Steep rocky steps","Starting Point": "Inveruglas"}},
     "ben-ime": { "name": "Ben Ime", "date": "16 Sep 2023", "area": "Arrochar Alps", "hero": "1.jpg", "number": 4, "repeats": "28 Oct 2023" },
     "ben-narnain": { "name": "Ben Narnain", "date": "16 Sep 2023", "area": "Arrochar Alps", "hero": "1.jpg", "number": 5, "repeats": "12 Jul 2024" },
     "ben-ghlas": { "name": "Ben Ghlas", "date": "23 Sep 2023", "area": "Loch Tay", "hero": "1.jpg", "number": 6 },
@@ -48,7 +48,7 @@
     "carn-ghluasaid": { "name": "Càrn Ghluasaid", "date": "18 Oct 2025", "area": "Kintail", "hero": "1.jpg", "number": 47 },
     "sgurr-nan-conbhairean": { "name": "Sgùrr nan Conbhairean", "date": "18 Oct 2025", "area": "Kintail", "hero": "1.jpg", "number": 48 },
     "sail-chaorainn": { "name": "Sàil Chaorainn", "date": "18 Oct 2025", "area": "Kintail", "hero": "1.jpg", "number": 49 },
-    "ben-mhanach": { "name": "Beinn Mhanach", "date": "1 Feb 2026", "area": "Argyll", "hero": "13.jpg", "number": 50, "winter": true },
+    "beinn-mhanach": {"name": "Beinn Mhanach","date": "01 Feb 2026","area": "Argyll","hero": "13.jpg","number": 50,"winter": true,"distance": "23.5km / 14.5 miles","time": "6.5 - 7.5 hours","ascent": "920m","grid_ref": "NN328331","bog_factor": "3/5","extra_details": {"Season": "Winter Climb","Starting Point": "Auch","Vibe": "Extremely remote and quiet","Note": "Long walk-in through the glen"}},
     "sron-a-choire-ghaibh": { "name": "Sròn a' Choire Ghaibh", "date": "7 Mar 2026", "area": "Fort William", "hero": "1.jpg", "number": 51 },
     "meall-na-teanga": { "name": "Meall na Teanga", "date": "7 Mar 2026", "area": "Fort William", "hero": "1.jpg", "number": 52 }
   }

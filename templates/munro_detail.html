@@ -66,13 +66,52 @@
             gap: 25px; 
             margin-top: 80px; 
         }
-        .gallery-grid img { 
+        /* Change this section in your <style> */
+            .gallery-grid img { 
             width: 100%; 
-            height: 400px;
-            object-fit: cover;
-            border-radius: 20px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            height: auto;          /* Changed from 400px to auto */
+            object-fit: contain;   /* Shows the full image without cropping */
+            border-radius: 12px; 
+            cursor: pointer;       /* Shows a hand icon so people know to click */
+            transition: transform 0.2s;
         }
+
+        .gallery-grid img:hover {
+            transform: scale(1.02); /* Subtle pop when hovering */
+        }
+
+        /* Lightbox Styles (The Overlay) */
+        #lightbox {
+            display: none; 
+            position: fixed; 
+            z-index: 999; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.9);
+            justify-content: center; 
+            align-items: center;
+        }
+
+        #lightbox img { 
+            max-width: 90%; 
+            max-height: 80%; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .close-btn, .nav-btn {
+            position: absolute;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            user-select: none;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 50%;
+        }
+
+        .close-btn { top: 20px; right: 30px; }
+        .nav-btn.prev { left: 20px; }
+        .nav-btn.next { right: 20px; }
 
         .back-btn {
             text-decoration: none;
@@ -123,16 +162,29 @@
             </div>
 
             <div class="sidebar">
-                <h3 style="margin-top: 0; font-size: 1.5rem;">🏔️ Trip Details</h3>
-                <p><strong>Munro Number:</strong> {{ m.number }} / 282</p>
-                <p><strong>Conditions:</strong> {{ m.hazards if m.hazards else "Standard" }}</p>
-                <p><strong>Recommended Gear:</strong> {{ m.kit if m.kit else "Standard Munro Kit" }}</p>
+                <h3 style="margin-top: 0;">🏔️ Walk Statistics</h3>
                 
-                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 30px 0;">
-                
-                <p style="font-size: 0.85rem; color: #64748b; line-height: 1.4;">
-                    Check <strong>MWIS</strong> for the forecast before heading out.
-                </p>
+                <div class="stats-standard">
+                    <p><strong>Munro #:</strong> {{ m.number }}</p>
+                    <p><strong>Distance:</strong> {{ m.distance }}</p>
+                    <p><strong>Ascent:</strong> {{ m.ascent }}</p>
+                    <p><strong>Bog Factor:</strong> {{ m.bog_factor }}</p>
+                </div>
+                <p><strong>Original Ascent:</strong> {{ m.date }}</p>
+                {% if m.extra_details['Repeat Climbs'] %}
+                <p style="color: #059669; font-weight: bold;">🔄 Revisited: {{ m.extra_details['Repeat Climbs'] }}</p>
+                {% endif %}
+                {% if m.extra_details %}
+                <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+                <h4 style="font-size: 0.9rem; color: #64748b; text-transform: uppercase;">Extra Details</h4>
+                <ul style="list-style: none; padding: 0; font-size: 0.9rem;">
+                    {% for label, value in m.extra_details.items() %}
+                        <li style="margin-bottom: 8px;">
+                            <strong>{{ label }}:</strong> {{ value }}
+                        </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
             </div>
         </div>
 
@@ -143,6 +195,48 @@
             {% endfor %}
         </div>
     </div>
-
+    <div id="lightbox">
+        <span class="close-btn">&times;</span>
+        <span class="nav-btn prev">&#10094;</span>
+        <img id="lightbox-img" src="">
+        <span class="nav-btn next">&#10095;</span>
+    </div>
+    
+    <script>
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const images = Array.from(document.querySelectorAll('.gallery-grid img'));
+        let currentIndex = 0;
+    
+        // Open Lightbox
+        images.forEach((img, index) => {
+            img.onclick = () => {
+                currentIndex = index;
+                showImage();
+                lightbox.style.display = 'flex';
+            };
+        });
+    
+        function showImage() {
+            lightboxImg.src = images[currentIndex].src;
+        }
+    
+        // Navigation
+        document.querySelector('.next').onclick = (e) => {
+            e.stopPropagation();
+            currentIndex = (currentIndex + 1) % images.length;
+            showImage();
+        };
+    
+        document.querySelector('.prev').onclick = (e) => {
+            e.stopPropagation();
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            showImage();
+        };
+    
+        // Close
+        document.querySelector('.close-btn').onclick = () => lightbox.style.display = 'none';
+        lightbox.onclick = () => lightbox.style.display = 'none';
+    </script>
 </body>
 </html>
